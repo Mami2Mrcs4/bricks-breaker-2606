@@ -83,6 +83,20 @@ void Game::Render() const
 	{
 		brick.Draw();
 	}
+	if (bricks.empty())
+
+	{
+		Console::ForegroundColor(ConsoleColor::Yellow);
+		Console::WordWrap(WINDOW_WIDTH / 2 - 10, WINDOW_HEIGHT / 2, 20, "VICTORY! Press R to reset");
+		Console::ResetColor();
+	}
+
+	if (ball.y_position >= WINDOW_HEIGHT - 1)
+	{
+		Console::ForegroundColor(ConsoleColor::Red);
+		Console::WordWrap(WINDOW_WIDTH / 2 - 10, WINDOW_HEIGHT / 2, 20, "DEFEAT! Press R to reset");
+		Console::ResetColor();
+	}
 
 	Console::Lock(false);
 }
@@ -112,10 +126,13 @@ void Game::CheckCollision()
 			++it;
 		}
 	}
-	}
+	
 
 	// TODO #6 - If no bricks remain, pause ball and display (render) victory text with R to reset
-
+	if (bricks.empty())
+	{
+		ball.moving = false;
+	}
 
 	if (paddle.Contains(ball.x_position + ball.x_velocity, ball.y_velocity + ball.y_position))
 	{
@@ -123,4 +140,8 @@ void Game::CheckCollision()
 	}
 
 	// TODO #7 - If ball touches bottom of window, pause ball and display (render) defeat text with R to reset
+	if (ball.y_position >= WINDOW_HEIGHT - 1)
+	{
+		ball.moving = false;
+	}
 }
